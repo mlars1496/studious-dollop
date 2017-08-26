@@ -8,9 +8,16 @@ var express = require('express'),
 
 Object.assign=require('object-assign')
 
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
 
+  //This uses the Connect frameworks body parser to parse the body of the post request
+  var bodyParser = require('body-parser');
+  var methodOverride = require('method-override');
+  // parse application/x-www-form-urlencoded
+   app.use(bodyParser.urlencoded());
+  // parse application/json
+   app.use(bodyParser.json());
+  // override with POST having ?_method=DELETE
+   app.use(methodOverride('_method'))
 
  
 
