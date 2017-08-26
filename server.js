@@ -70,6 +70,9 @@ var initDb = function(callback) {
 
 
 
+
+
+
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -88,6 +91,8 @@ app.get('/', function (req, res) {
      res.end('success');
   }
 });
+
+
 
 
 
@@ -121,7 +126,6 @@ app.get('/near', function (req, res) {
     if (!db) {
       initDb(function(err){});
     }
-   
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
 		    if(err){
 		   res.header("Content-Type:","application/json");
@@ -132,10 +136,9 @@ app.get('/near', function (req, res) {
 		      res.end(JSON.stringify(docs));
 			}
 		});
-   
-	
-	
+
 });
+
 
 
 
@@ -144,10 +147,10 @@ app.get('/near', function (req, res) {
     //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
     var lat = parseFloat(req.body.lat);
     var lon = parseFloat(req.body.lon);
-	 	  var m = req.body.m;  
+	   var m = req.body.m;  
 	 var t = req.body.t;
 	  var f = req.body.f;
-    self.db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
+     db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
     if (err) { throw err; }
     res.end('success');
     });
@@ -159,7 +162,7 @@ app.get('/near', function (req, res) {
 
 
 self.routes['delAPark'] = function(req, res){
-   self.db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+    db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
     });
