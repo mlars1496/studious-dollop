@@ -4,9 +4,10 @@ var express = require('express'),
     app     = express();  
 
 
+
 Object.assign=require('object-assign')
 
-
+  var ObjectID = mongodb.ObjectID;
 
  //This uses the Connect frameworks body parser to parse the body of the post request
   var bodyParser = require('body-parser');
@@ -63,6 +64,8 @@ var initDb = function(callback) {
     dbDetails.databaseName = db.databaseName;
     dbDetails.url = mongoURLLabel;
     dbDetails.type = 'MongoDB';
+
+	
 
     console.log('Connected to MongoDB at: %s', mongoURL);
   });
