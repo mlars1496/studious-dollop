@@ -145,7 +145,7 @@ app.get('/near', function (req, res) {
 
 
 
-app.get('/p', function (req, res)
+app.get('/p', function (req, res){
      var lat = parseFloat(req.body.lat);
     var lon = parseFloat(req.body.lon);
 	   var m = req.body.m;  
