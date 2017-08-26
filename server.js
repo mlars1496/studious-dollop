@@ -3,8 +3,12 @@ var express = require('express'),
     fs      = require('fs'),
     app     = express(),
     eps     = require('ejs'),
-    morgan  = require('morgan');
-    
+    morgan  = require('morgan'); 
+var fs      = require('fs'); 
+var ObjectID = mongodb.ObjectID;
+
+
+
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
