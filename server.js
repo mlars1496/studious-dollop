@@ -6,7 +6,7 @@ var express = require('express'),
  
 
 Object.assign=require('object-assign')
-
+var ObjectID = mongodb.ObjectID;
  
 
  //This uses the Connect frameworks body parser to parse the body of the post request
@@ -117,10 +117,9 @@ app.get('/pagecount', function (req, res) {
 });
 
  
+ 
 
-
-
-app.get('/near', function (req, res) {
+app.get('/ws/parks/near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -153,7 +152,7 @@ app.get('/near', function (req, res) {
 
 
 
-app.get('/pasas', function (req, res){
+app.get('/ws/parks/park', function (req, res){
      var lat = parseFloat(req.body.lat);
     var lon = parseFloat(req.body.lon);
 	   var m = req.body.m;  
@@ -168,6 +167,13 @@ app.get('/pasas', function (req, res){
 
 
 
+ 
+self.routes['/ws/dy75c/'] = function(req, res){
+   self.db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+  };
 
 
 
