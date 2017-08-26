@@ -2,8 +2,7 @@
 var express = require('express'),
     fs      = require('fs'),
     app     = express();  
-var ObjectID;
-
+ 
 
 Object.assign=require('object-assign')
  
@@ -66,8 +65,7 @@ var initDb = function(callback) {
     dbDetails.url = mongoURLLabel;
     dbDetails.type = 'MongoDB';
  
-	  var ObjectID = mongodb.ObjectID;
-
+	 
     console.log('Connected to MongoDB at: %s', mongoURL);
   });
 };
@@ -169,13 +167,6 @@ app.get('/ws/parks/park', function (req, res){
 
 
  
-self.routes['/ws/dy75c/'] = function(req, res){
-   self.db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
-   if (err) { throw err; }
-    res.end('success');
-    });
-  };
-
 
 
 // error handling
