@@ -98,6 +98,35 @@ app.get('/returnAPark', function (req, res) {
   
   
 
+
+app.get('/returnParkNear', function (req, res) {
+	
+    var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	
+    if (!db) {
+      initDb(function(err){});
+    }
+    if (db) {
+		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
+		    if(err){
+		   res.header("Content-Type:","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		    else{
+		     res.header("Content-Type:","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		});
+    } else {
+       res.end('success');
+    }
+	
+	
+});
+
+
+
 // error handling
 app.use(function(err, req, res, next){
   console.error(err.stack);
