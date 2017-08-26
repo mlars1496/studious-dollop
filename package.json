@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Node.js sample app for OpenShift 3",
   "main": "server.js",
+  
   "dependencies": {
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
@@ -11,7 +12,9 @@
     "mocha": "^2.4.5",
     "mongodb": "^2.1.16",
     "morgan": "^1.7.0",
-    "object-assign":"4.1.0"
+    "object-assign":"4.1.0",
+    "body-parser": "> 1.0.0",
+    "method-override": "> 1.0.0"
   },
   "engine": {
     "node": "*",
