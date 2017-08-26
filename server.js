@@ -7,7 +7,11 @@ var express = require('express'),
 
 Object.assign=require('object-assign')
 
+
+
   var ObjectID = mongodb.ObjectID;
+
+
 
  //This uses the Connect frameworks body parser to parse the body of the post request
   var bodyParser = require('body-parser');
@@ -145,8 +149,7 @@ app.get('/near', function (req, res) {
 
 
 
-
-  self.routes['postAPark'] = function(req, res){
+app.get('/p', function (req, res)
     //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
     var lat = parseFloat(req.body.lat);
     var lon = parseFloat(req.body.lon);
@@ -164,7 +167,7 @@ app.get('/near', function (req, res) {
 
 
 
-self.routes['delAPark'] = function(req, res){
+app.get('/d', function (req, res)
     db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
