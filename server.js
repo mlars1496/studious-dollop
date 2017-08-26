@@ -15,9 +15,7 @@ Object.assign=require('object-assign')
   // parse application/x-www-form-urlencoded
    app.use(bodyParser.urlencoded());
   // parse application/json
-   app.use(bodyParser.json());
-  // override with POST having ?_method=DELETE
-   app.use(methodOverride('_method'))
+   app.use(bodyParser.json()); 
 
  
 
