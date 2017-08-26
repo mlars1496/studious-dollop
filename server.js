@@ -11,19 +11,7 @@ app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
 
 
-
-
-
-  var bodyParser = require('body-parser');
-  var methodOverride = require('method-override');
-  app.use(bodyParser.urlencoded());
-  app.use(bodyParser.json());
-  app.use(methodOverride('_method'))
-
-
-
-
-
+ 
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
