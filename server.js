@@ -10,12 +10,10 @@ Object.assign=require('object-assign')
 
 
   //This uses the Connect frameworks body parser to parse the body of the post request
-  var bodyParser = require('body-parser');
-  var methodOverride = require('method-override');
-  // parse application/x-www-form-urlencoded
-   app.use(bodyParser.urlencoded());
+  var bodyParser = require('body-parser'); 
+   this.app.use(bodyParser.urlencoded());
   // parse application/json
-   app.use(bodyParser.json()); 
+   this.app.use(bodyParser.json()); 
 
  
 
