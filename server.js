@@ -108,10 +108,12 @@ app.get('/pagecount', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
+	  console.log('IS OK 1');
     db.collection('counts').count(function(err, count ){
        res.end('success');
     });
   } else {
+	    console.log('IS BAD 1');
      res.end('success');
   } 
 });
@@ -130,10 +132,12 @@ app.get('/near', function (req, res) {
     }
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
 		    if(err){
+			      console.log('IS OK 2');
 		   res.header("Content-Type:","application/json");
 		      res.end(JSON.stringify(docs));
 			}
 		    else{
+			      console.log('IS BAD 2');
 		     res.header("Content-Type:","application/json");
 		      res.end(docs);
 			}
@@ -158,7 +162,8 @@ app.get('/pasas', function (req, res){
 	 var t = req.body.t;
 	  var f = req.body.f;
      db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
-    if (err) { throw err; }
+    if (err) {   console.log('IS BAD 3'); throw err; }
+	       console.log('IS OK 3');
     res.end('success');
     });
  });
