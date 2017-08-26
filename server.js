@@ -11,13 +11,14 @@ Object.assign=require('object-assign')
   var bodyParser = require('body-parser');
   var methodOverride = require('method-override');
   // parse application/x-www-form-urlencoded
-   app.use(bodyParser.urlencoded());
+   app.use(bodyParser.urlencoded({ extended: true }));
+
   // parse application/json
    app.use(bodyParser.json());
   // override with POST having ?_method=DELETE
    app.use(methodOverride('_method'))
  
-
+ 
 
 
 
