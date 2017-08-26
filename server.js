@@ -145,21 +145,6 @@ app.get('/near', function (req, res) {
 
 
 
-app.get('/p', function (req, res){
-     var lat = parseFloat(req.body.lat);
-    var lon = parseFloat(req.body.lon);
-	   var m = req.body.m;  
-	 var t = req.body.t;
-	  var f = req.body.f;
-     db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
-    if (err) { throw err; }
-    res.end('success');
-    });
-  };
-
-
-
-
 
 
  
