@@ -75,10 +75,10 @@ app.get('/', function (req, res) {
     // Create a document with request IP and current time of request
     col.insert({ip: req.ip, date: Date.now()});
     col.count(function(err, count){
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
+       res.end('success');
     });
   } else {
-    res.render('index.html', { pageCountMessage : null});
+     res.end('success');
   }
 });
 
@@ -93,10 +93,10 @@ app.get('/pagecount', function (req, res) {
   }
   if (db) {
     db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
+       res.end('success');
     });
   } else {
-    res.send('{ pageCount: -1 }');
+     res.end('success');
   }
   
   
@@ -114,7 +114,7 @@ app.get('/returnParkNear', function (req, res) {
     if (!db) {
       initDb(function(err){});
     }
-    if (db) {
+   
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
 		    if(err){
 		   res.header("Content-Type:","application/json");
@@ -125,9 +125,7 @@ app.get('/returnParkNear', function (req, res) {
 		      res.end(JSON.stringify(docs));
 			}
 		});
-    } else {
-       res.end('success');
-    }
+   
 	
 	
 });
