@@ -113,7 +113,7 @@ app.get('/pagecount', function (req, res) {
 
 
 
-app.get('/returnParkNear', function (req, res) {
+app.get('/near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -137,6 +137,34 @@ app.get('/returnParkNear', function (req, res) {
 	
 });
 
+
+
+
+  self.routes['postAPark'] = function(req, res){
+    //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
+    var lat = parseFloat(req.body.lat);
+    var lon = parseFloat(req.body.lon);
+	 	  var m = req.body.m;  
+	 var t = req.body.t;
+	  var f = req.body.f;
+    self.db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
+    if (err) { throw err; }
+    res.end('success');
+    });
+  };
+
+
+
+
+
+
+self.routes['delAPark'] = function(req, res){
+   self.db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+  };
+  
 
 
 
