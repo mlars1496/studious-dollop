@@ -149,11 +149,11 @@ app.get('/ws/parks/near', function (req, res) {
 
 
 app.get('/ws/parks/park', function (req, res){
-     var lat = parseFloat(req.body.lat);
-    var lon = parseFloat(req.body.lon);
+     var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
 	   var m = req.query.m; 
-	 var t = req.body.t;
-	  var f = req.body.f;
+	 var t = req.query.t;
+	  var f = req.query.f;
      db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
     if (err) {   console.log('IS BAD 3'); throw err; } else
 	       console.log('IS OK 3');
