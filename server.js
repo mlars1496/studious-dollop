@@ -135,7 +135,7 @@ app.get('/near', function (req, res) {
 			}
 		    else{
 		     res.header("Content-Type:","application/json");
-		      res.end(JSON.stringify(docs));
+		      res.end(docs);
 			}
 		});
 
