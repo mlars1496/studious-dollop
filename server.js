@@ -1,143 +1,164 @@
-//  OpenShift sample Node application
-var express = require('express'),
-    fs      = require('fs'),
-    app     = express(),
-    eps     = require('ejs'),
-    morgan  = require('morgan');
-    
-Object.assign=require('object-assign')
+#!/bin/env node
 
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+var express = require('express');
+var fs      = require('fs');
+var mongodb = require('mongodb');
+var ObjectID = mongodb.ObjectID;
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
-    mongoURLLabel = "";
+var App = function(){
 
-if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
-  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
-      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
-      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
-      mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
-      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
-      mongoUser = process.env[mongoServiceName + '_USER'];
+  // Scope
+  var self = this;
 
-  if (mongoHost && mongoPort && mongoDatabase) {
-    mongoURLLabel = mongoURL = 'mongodb://';
-    if (mongoUser && mongoPassword) {
-      mongoURL += mongoUser + ':' + mongoPassword + '@';
-    }
-    // Provide UI label that excludes user id and pw
-    mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
-    mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+  // Setup
+  self.dbServer = new mongodb.Server(process.env.OPENSHIFT_MONGODB_DB_HOST,parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT));
+  self.db = new mongodb.Db(process.env.OPENSHIFT_APP_NAME, self.dbServer, {auto_reconnect: true});
+  self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
+  self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
-  }
-}
-var db = null,
-    dbDetails = new Object();
-
-var initDb = function(callback) {
-  if (mongoURL == null) return;
-
-  var mongodb = require('mongodb');
-  if (mongodb == null) return;
-
-  mongodb.connect(mongoURL, function(err, conn) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    db = conn;
-    dbDetails.databaseName = db.databaseName;
-    dbDetails.url = mongoURLLabel;
-    dbDetails.type = 'MongoDB';
-
-    console.log('Connected to MongoDB at: %s', mongoURL);
-  });
-};
-
-app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    var col = db.collection('counts');
-    // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
-    });
-  } else {
-    res.render('index.html', { pageCountMessage : null});
-  }
-});
-
-app.get('/pagecount', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
-    });
-  } else {
-    res.send('{ pageCount: -1 }');
-  }
-});
+  self.ipaddr  = process.env.OPENSHIFT_NODEJS_IP;
+  self.port    = parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
+  if (typeof self.ipaddr === "undefined") {
+    console.warn('No OPENSHIFT_NODEJS_IP environment variable');
+  };
 
 
-app.get('/returnAPark', function (req, res) {
+  // Web app logic
+  self.routes = {};
+  self.routes['health'] = function(req, res){ res.send('1'); };
+  
+  //default response with info about app URLs
+  self.routes['root'] = function(req, res){ 
+    res.send(''); 
+  };
+
+  //returns all the parks in the collection
+  self.routes['returnAllParks'] = function(req, res){
+    res.end('success');
+  };
+
+  //find a single park by passing in the objectID to the URL
+  self.routes['returnAPark'] = function(req, res){
      res.end('success');
-});
-  
-  
+  }
 
-
-app.get('/returnParkNear', function (req, res) {
-	
+  //find parks near a certain lat and lon passed in as query parameters (near?lat=45.5&lon=-82)
+  self.routes['returnParkNear'] = function(req, res){
+    //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
-	
-    if (!db) {
-      initDb(function(err){});
-    }
-    if (db) {
-		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
-		    if(err){
-		   res.header("Content-Type:","application/json");
-		      res.end(JSON.stringify(docs));
-			}
-		    else{
-		     res.header("Content-Type:","application/json");
-		      res.end(JSON.stringify(docs));
-			}
-		});
-    } else {
-       res.end('success');
-    }
+ //    db.collection('places').geoNear(50, 50, {$maxDistance:10}, function(err, result) {
+   // if(err) return console.dir(err)
+//   assert.equal(result.results, 2);
+//  });
+//    self.db.collection('parkpoints').find( {"pos" : { $near : [lon,lat], $maxDistance: 10}}).limit(5).toArray(function(err,names){
 	
 	
+self.db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
+    if(err){
+   res.header("Content-Type:","application/json");
+      res.end(JSON.stringify(docs));
+	}
+    else{
+     res.header("Content-Type:","application/json");
+      res.end(JSON.stringify(docs));
+	}
 });
 
+  };
+
+  //find parks near a certain park name, lat and lon (name?lon=10&lat=10)
+  self.routes['returnParkNameNear'] = function(req, res){
+    //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
+    res.end('success');
+  };
+
+  //saves new park
+  self.routes['postAPark'] = function(req, res){
+    //in production you would do some sanity checks on these values before parsing and handle the error if they don't parse
+    var lat = parseFloat(req.body.lat);
+    var lon = parseFloat(req.body.lon);
+	 	  var m = req.body.m;  
+	 var t = req.body.t;
+	  var f = req.body.f;
+    self.db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
+    if (err) { throw err; }
+    res.end('success');
+    });
+  };
 
 
-// error handling
-app.use(function(err, req, res, next){
-  console.error(err.stack);
-  res.status(500).send('Something bad happened!');
-});
+self.routes['delAPark'] = function(req, res){
+   self.db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+  };
+  
+ 
+  // Web app urls
+  self.app  = express();
 
-initDb(function(err){
-  console.log('Error connecting to Mongo. Message:\n'+err);
-});
+  //This uses the Connect frameworks body parser to parse the body of the post request
+  var bodyParser = require('body-parser');
+  var methodOverride = require('method-override');
+  // parse application/x-www-form-urlencoded
+  self.app.use(bodyParser.urlencoded());
+  // parse application/json
+  self.app.use(bodyParser.json());
+  // override with POST having ?_method=DELETE
+  self.app.use(methodOverride('_method'))
 
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
+  //define all the url mappings
+  self.app.get('/health', self.routes['health']);
+  self.app.get('/', self.routes['root']);
+  self.app.get('/ws/parks', self.routes['returnAllParks']);
+  self.app.get('/ws/parks/park/:id', self.routes['returnAPark']);
+  self.app.get('/ws/parks/near', self.routes['returnParkNear']);
+  self.app.get('/ws/parks/name/near/:name', self.routes['returnParkNameNear']);
+  self.app.post('/ws/parks/park', self.routes['postAPark']);
+  self.app.get('/ws/dy/:id', self.routes['delAPark']);
 
-module.exports = app ;
+  // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
+  self.connectDb = function(callback){
+    self.db.open(function(err, db){
+      if(err){ throw err };
+      self.db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
+        if(err){ throw err };
+        callback();
+      });
+    });
+  };
+  
+  
+  //starting the nodejs server with express
+  self.startServer = function(){
+    self.app.listen(self.port, self.ipaddr, function(){
+      console.log('%s: Node server started on %s:%d ...', Date(Date.now()), self.ipaddr, self.port);
+    });
+  }
+
+  // Destructors
+  self.terminator = function(sig) {
+    if (typeof sig === "string") {
+      console.log('%s: Received %s - terminating Node server ...', Date(Date.now()), sig);
+      process.exit(1);
+    };
+    console.log('%s: Node server stopped.', Date(Date.now()) );
+  };
+
+  process.on('exit', function() { self.terminator(); });
+
+  self.terminatorSetup = function(element, index, array) {
+    process.on(element, function() { self.terminator(element); });
+  };
+
+  ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM'].forEach(self.terminatorSetup);
+
+};
+
+//make a new express app
+var app = new App();
+
+//call the connectDb function and pass in the start server command
+app.connectDb(app.startServer);
