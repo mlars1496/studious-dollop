@@ -8,13 +8,6 @@ var express = require('express'),
 
 Object.assign=require('object-assign')
 
-
-  //This uses the Connect frameworks body parser to parse the body of the post request
-  var bodyParser = require('body-parser'); 
-   this.app.use(bodyParser.urlencoded());
-  // parse application/json
-   this.app.use(bodyParser.json()); 
-
  
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
