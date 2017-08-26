@@ -91,6 +91,13 @@ app.get('/pagecount', function (req, res) {
   }
 });
 
+
+app.get('/returnAPark', function (req, res) {
+     res.end('success');
+});
+  
+  
+
 // error handling
 app.use(function(err, req, res, next){
   console.error(err.stack);
