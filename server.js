@@ -1,17 +1,24 @@
 //  OpenShift sample Node application
 var express = require('express'),
     fs      = require('fs'),
-    app     = express(),
-    eps     = require('ejs'),
-    morgan  = require('morgan');  
+    app     = express();  
 
 
 Object.assign=require('object-assign')
 
 
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+
+ //This uses the Connect frameworks body parser to parse the body of the post request
+  var bodyParser = require('body-parser');
+  var methodOverride = require('method-override');
+  // parse application/x-www-form-urlencoded
+  self.app.use(bodyParser.urlencoded());
+  // parse application/json
+  self.app.use(bodyParser.json());
+  // override with POST having ?_method=DELETE
+  self.app.use(methodOverride('_method'))
  
+
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
