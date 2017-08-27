@@ -77,43 +77,6 @@ var initDb = function(callback) {
 
 
 
-app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    var col = db.collection('counts');  
-    var points = db.collection('parkpoints');
-    // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-       res.end('success');
-    });
-  } else {
-     res.end('success');
-  }
-});
-
-
-
-
-
-app.get('/pagecount', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
-    });
-  } else {
-    res.send('{ pageCount: -1 }');
-  }
-});
 
  
  
@@ -127,13 +90,11 @@ app.get('/ws/parks/near', function (req, res) {
       initDb(function(err){});
     }
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
-		    if(err){
-			      console.log('IS BAD 2');
+		    if(err){ 
 		   res.header("Content-Type","application/json");
 		      res.end(JSON.stringify(docs));
 			}
-		    else{
-			      console.log('IS OK 2');
+		    else{ 
 		   res.header("Content-Type","application/json");
 		      res.end(JSON.stringify(docs));
 			}
@@ -155,15 +116,29 @@ app.get('/ws/parks/park', function (req, res){
 	 var t = req.query.t;
 	  var f = req.query.f;
      db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
-    if (err) {   console.log('IS BAD 3'); throw err; } else
-	       console.log('IS OK 3');
+    if (err) {  throw err; } 
     res.end('success');
     });
  });
 
 
 
+
+
  
+
+app.get('/ws/dy', function (req, res){ 
+   db.collection('parkpoints').deleteOne({_id: new ObjectID(req.query.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+  };
+  
+
+
+
+
+
 
 
 // error handling
