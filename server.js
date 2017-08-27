@@ -178,7 +178,8 @@ app.get('/ws/dy', function (req, res){
   }
   if (db) {
   var iz = req.query.id.toString();
-db.collection('parkpoints').remove({"_id":iz}, function(err, result) { 
+  var ObjectId = require('mongodb').ObjectID;
+	db.collection('parkpoints').remove({_id: new ObjectId(iz)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
     });
