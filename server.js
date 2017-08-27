@@ -180,7 +180,7 @@ app.get('/ws/dy', function (req, res){
   var ObjectID = mongodb.ObjectID;
   var is = req.query.id;
 is = "59a1eaca010e8a00190b3be4";
-db.collection('parkpoints').deleteOne({_id: new ObjectID(is)}, function(err, result) {
+db.collection('parkpoints').remove({"_id":is}, function(err, result) { 
    if (err) { throw err; }
     res.end('success');
     });
@@ -197,13 +197,7 @@ db.collection('parkpoints').deleteOne({_id: new ObjectID(is)}, function(err, res
     initDb(function(err){});
   }
   if (db) {
-    var uid = req.params.id.toString();
-    var collection = db.get('parkpoints');
-
-    collection.remove({"_id":uid}, function(err, result) { 
-if (err) { throw err; }
-    res.end('success');
-    });
+   
 }
 });
 
