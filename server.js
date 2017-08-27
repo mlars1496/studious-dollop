@@ -172,7 +172,7 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
-app.get('/ws/dy/:id'', function (req, res){ 
+app.get('/ws/dy/:id', function (req, res){ 
 	  if (!db) {
     initDb(function(err){});
   }
