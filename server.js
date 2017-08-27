@@ -3,7 +3,7 @@ var express = require('express'),
     app     = express();  
  
 
-Object.assign=require('object-assign')
+   Object.assign=require('object-assign')
  
 
  //This uses the Connect frameworks body parser to parse the body of the post request
@@ -17,9 +17,6 @@ Object.assign=require('object-assign')
   // override with POST having ?_method=DELETE
    app.use(methodOverride('_method'))
  
- 
-
-
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -76,7 +73,6 @@ var initDb = function(callback) {
 
 
 
-
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -118,33 +114,8 @@ app.get('/pagecount', function (req, res) {
 
  
  
+// asection 
 
-app.get('/ws/parks/near', function (req, res) {
-	
-    var lat = parseFloat(req.query.lat);
-    var lon = parseFloat(req.query.lon);
-	
-    if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
-		    if(err){
-		   res.header("Content-Type","application/json");
-		      res.end(JSON.stringify(docs));
-			}
-		    else{
-		   res.header("Content-Type","application/json");
-		      res.end(JSON.stringify(docs));
-			}
-		});
-}
-});
-
-
-
- 
-  
 
 app.get('/ws/parks/nearz', function (req, res) {
 	
@@ -170,7 +141,30 @@ app.get('/ws/parks/nearz', function (req, res) {
 
 
 
+// dsection 
 
+
+app.get('/ws/parks/near', function (req, res) {
+	
+    var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	
+    if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
+		    if(err){
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		    else{
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		});
+}
+});
 
 
 app.get('/ws/parks/park', function (req, res){
@@ -184,16 +178,10 @@ app.get('/ws/parks/park', function (req, res){
 	 var t = req.query.t;
 	  var f = req.query.f;
      db.collection('parkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
-    if (err) {  throw err; } 
-    res.end('success');
     });
-}	  
+}
+res.end('success');
  });
-
-
-
- 
-
 
 
 
@@ -205,10 +193,9 @@ app.get('/ws/dy', function (req, res){
   var ObjectId = require('mongodb').ObjectID;
  var collection = db.get('parkpoints');
 collection.remove({_id: new ObjectId(req.query.ii)}, function(err, result) {
-   if (err) { throw err; }
-    res.end('success');
     });
 }
+    res.end('success');
   });
 
             
