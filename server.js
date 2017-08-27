@@ -172,13 +172,13 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
-app.get('/ws/dy/:id', function (req, res){ 
+app.get('/ws/dy', function (req, res){ 
 	  if (!db) {
     initDb(function(err){});
   }
   if (db) {
-  var is = req.query.id.toString();
-db.collection('parkpoints').remove({"_id":is}, function(err, result) { 
+  var iz = req.query.id.toString();
+db.collection('parkpoints').remove({"_id":iz}, function(err, result) { 
    if (err) { throw err; }
     res.end('success');
     });
