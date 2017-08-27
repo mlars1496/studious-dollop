@@ -55,8 +55,6 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
-var ObjectID = mongodb.ObjectID;
-
   mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
@@ -178,7 +176,10 @@ app.get('/ws/dy', function (req, res){
     initDb(function(err){});
   }
   if (db) {
-
+db.collection('parkpoints').deleteOne({_id: (req.query.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
 }
   };
 
