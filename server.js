@@ -117,7 +117,7 @@ app.get('/pagecount', function (req, res) {
 // asection 
 
 
-app.get('/ws/parks/nearz', function (req, res) {
+app.get('/ws/parks/anear', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -144,7 +144,7 @@ app.get('/ws/parks/nearz', function (req, res) {
 // dsection 
 
 
-app.get('/ws/parks/near', function (req, res) {
+app.get('/ws/parks/dnear', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -167,7 +167,7 @@ app.get('/ws/parks/near', function (req, res) {
 });
 
 
-app.get('/ws/parks/park', function (req, res){
+app.get('/ws/parks/dpark', function (req, res){
 	  if (!db) {
     initDb(function(err){});
   }
@@ -185,7 +185,7 @@ res.end('success');
 
 
 
-app.get('/ws/dy', function (req, res){ 
+app.get('/ws/parks/dx', function (req, res){ 
 	  if (!db) {
     initDb(function(err){});
   }
