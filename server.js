@@ -181,7 +181,7 @@ db.collection('parkpoints').deleteOne({_id: (req.query.id)}, function(err, resul
     res.end('success');
     });
 }
-  };
+  });
 
 
 
