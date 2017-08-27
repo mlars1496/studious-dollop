@@ -114,10 +114,10 @@ app.get('/pagecount', function (req, res) {
 
  
  
-// asection 
+// ar-section 
 
 
-app.get('/ws/parks/anear', function (req, res) {
+app.get('/ws/parks/arnear', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -141,7 +141,7 @@ app.get('/ws/parks/anear', function (req, res) {
 
 
 
-// dsection 
+// d-section 
 
 
 app.get('/ws/parks/dnear', function (req, res) {
@@ -199,6 +199,96 @@ collection.remove({_id: new ObjectId(req.query.ii)}, function(err, result) {
   });
 
             
+
+
+
+// a-section 
+
+
+app.get('/ws/parks/anear', function (req, res) {
+	
+    var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	
+    if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+		db.collection('barkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
+		    if(err){
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		    else{
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		});
+}
+});
+
+
+app.get('/ws/parks/apark', function (req, res){
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+     var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	   var m = req.query.m; 
+	 var t = req.query.t;
+	  var f = req.query.f;
+     db.collection('barkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
+    });
+}
+res.end('success');
+ });
+
+
+
+
+
+// t-section 
+
+
+app.get('/ws/parks/tnear', function (req, res) {
+	
+    var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	
+    if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+		db.collection('perkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
+		    if(err){
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		    else{
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		});
+}
+});
+
+
+app.get('/ws/parks/tpark', function (req, res){
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+     var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	   var m = req.query.m; 
+	 var t = req.query.t;
+	  var f = req.query.f;
+     db.collection('perkpoints').insert( {'m' : m, 'f' : f, 't' : t,'pos' : [lon,lat]}, {w:1}, function(err, records){
+    });
+}
+res.end('success');
+ });
 
 
 
