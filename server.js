@@ -178,14 +178,14 @@ app.get('/ws/dy/:id', function (req, res){
   }
   if (db) { 
   var ObjectId = require('mongodb').ObjectID;
-  db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+ var collection = db.get('parkpoints');
+ 
+  collection.deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
     });
 }
   });
-
-
 
 
 
