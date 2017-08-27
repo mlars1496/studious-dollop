@@ -55,8 +55,6 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
-var ObjectId = require('mongodb').ObjectId;	
-	
   mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
@@ -126,8 +124,9 @@ app.get('/ws/parks/near', function (req, res) {
     var lon = parseFloat(req.query.lon);
 	
     if (!db) {
-      initDb(function(err){});
-    }
+    initDb(function(err){});
+  }
+  if (db) {
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
 		    if(err){
 		   res.header("Content-Type","application/json");
@@ -138,7 +137,7 @@ app.get('/ws/parks/near', function (req, res) {
 		      res.end(JSON.stringify(docs));
 			}
 		});
-
+}
 });
 
 
@@ -149,6 +148,10 @@ app.get('/ws/parks/near', function (req, res) {
 
 
 app.get('/ws/parks/park', function (req, res){
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
      var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
 	   var m = req.query.m; 
@@ -158,6 +161,7 @@ app.get('/ws/parks/park', function (req, res){
     if (err) {  throw err; } 
     res.end('success');
     });
+}	  
  });
 
 
@@ -165,15 +169,6 @@ app.get('/ws/parks/park', function (req, res){
  
 
 
-
-
-app.get('/ws/dy', function (req, res){ 
-db.collection('parkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {
-   // db.collection('parkpoints').deleteOne({_id: new mongodb.ObjectID(req.query.id)}, function(err, result) {
-   if (err) { throw err; }
-    res.end('success');
-    });
-  };
 
 
 
