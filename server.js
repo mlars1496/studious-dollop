@@ -164,12 +164,6 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
-app.get('/ws/dy', function (req, res){ 
-   db.collection('parkpoints').deleteOne({_id: new mongodb.ObjectID(req.query.id)}, function(err, result) {
-   if (err) { throw err; }
-    res.end('success');
-    });
-  };
 
 
 
