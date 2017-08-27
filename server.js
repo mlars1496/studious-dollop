@@ -55,6 +55,8 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
+var ObjectID = mongodb.ObjectID;
+
   mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
@@ -167,6 +169,22 @@ app.get('/ws/parks/park', function (req, res){
 
 
  
+
+
+
+
+app.get('/ws/dy', function (req, res){ 
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+db.collection('parkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {
+   // db.collection('parkpoints').deleteOne({_id: new mongodb.ObjectID(req.query.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+}
+  };
 
 
 
