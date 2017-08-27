@@ -201,7 +201,8 @@ db.collection('parkpoints').deleteOne({_id: new ObjectID(is)}, function(err, res
     var collection = db.get('parkpoints');
 
     collection.remove({"_id":uid}, function(err, result) { 
-        res.send( (result === 1) ? { msg: 'Deleted' } : { msg: 'error: '+ err } );
+if (err) { throw err; }
+    res.end('success');
     });
 }
 });
