@@ -176,7 +176,7 @@ app.get('/ws/dy', function (req, res){
     initDb(function(err){});
   }
   if (db) {
-db.collection('parkpoints').deleteOne({_id: (req.query.id)}, function(err, result) {
+db.collection('parkpoints').deleteOne({_id: new ObjectID(req.query.id)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
     });
