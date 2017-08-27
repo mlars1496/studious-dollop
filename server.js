@@ -146,6 +146,31 @@ app.get('/ws/parks/near', function (req, res) {
  
   
 
+app.get('/ws/parks/nearz', function (req, res) {
+	
+    var lat = parseFloat(req.query.lat);
+    var lon = parseFloat(req.query.lon);
+	
+    if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+		db.collection('pa').geoNear([lon,lat], {limit:9, spherical:true}, function(err, docs){
+		    if(err){
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		    else{
+		   res.header("Content-Type","application/json");
+		      res.end(JSON.stringify(docs));
+			}
+		});
+}
+});
+
+
+
+
 
 
 app.get('/ws/parks/park', function (req, res){
