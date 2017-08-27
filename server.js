@@ -1,4 +1,3 @@
-//  OpenShift sample Node application
 var express = require('express'),
     fs      = require('fs'),
     app     = express();  
@@ -77,6 +76,43 @@ var initDb = function(callback) {
 
 
 
+app.get('/', function (req, res) {
+  // try to initialize the db on every request if it's not already
+  // initialized.
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    var col = db.collection('counts');  
+    var points = db.collection('parkpoints');
+    // Create a document with request IP and current time of request
+    col.insert({ip: req.ip, date: Date.now()});
+    col.count(function(err, count){
+       res.end('success');
+    });
+  } else {
+     res.end('success');
+  }
+});
+
+
+
+
+
+app.get('/pagecount', function (req, res) {
+  // try to initialize the db on every request if it's not already
+  // initialized.
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    db.collection('counts').count(function(err, count ){
+      res.send('{ pageCount: ' + count + '}');
+    });
+  } else {
+    res.send('{ pageCount: -1 }');
+  }
+});
 
  
  
@@ -90,11 +126,11 @@ app.get('/ws/parks/near', function (req, res) {
       initDb(function(err){});
     }
 		db.collection('parkpoints').geoNear([lon,lat], {limit:5, spherical:true}, function(err, docs){
-		    if(err){ 
+		    if(err){
 		   res.header("Content-Type","application/json");
 		      res.end(JSON.stringify(docs));
 			}
-		    else{ 
+		    else{
 		   res.header("Content-Type","application/json");
 		      res.end(JSON.stringify(docs));
 			}
@@ -123,14 +159,7 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
-
-
  
-
-
-
-
-
 
 
 // error handling
