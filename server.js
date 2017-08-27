@@ -172,21 +172,21 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
-app.get('/ws/dy/:id', function (req, res){ 
+app.get('/ws/dy', function (req, res){ 
 	  if (!db) {
     initDb(function(err){});
   }
   if (db) { 
   var ObjectId = require('mongodb').ObjectID;
  var collection = db.get('parkpoints');
- 
-  collection.deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+collection.remove({_id: new ObjectId(req.query.ii)}, function(err, result) {
    if (err) { throw err; }
     res.end('success');
     });
 }
   });
 
+            
 
 
 
