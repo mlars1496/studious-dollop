@@ -49,11 +49,14 @@ var db = null,
     dbDetails = new Object();
 
 var initDb = function(callback) {
+ 	
   if (mongoURL == null) return;
 
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
+var ObjectId = require('mongodb').ObjectId;	
+	
   mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
@@ -164,6 +167,13 @@ app.get('/ws/parks/park', function (req, res){
 
 
 
+app.get('/ws/dy', function (req, res){ 
+db.collection('parkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {
+   // db.collection('parkpoints').deleteOne({_id: new mongodb.ObjectID(req.query.id)}, function(err, result) {
+   if (err) { throw err; }
+    res.end('success');
+    });
+  };
 
 
 
