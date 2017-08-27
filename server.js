@@ -192,18 +192,6 @@ db.collection('parkpoints').remove({"_id":is}, function(err, result) {
 
 
 
- router.get('/deleteuser/:id', function(req, res) { 
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-   
-}
-});
-
-
-
-
 
 
 // error handling
