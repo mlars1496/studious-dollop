@@ -55,6 +55,8 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
+  var ObjectID = mongodb.ObjectID;
+	
   mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
