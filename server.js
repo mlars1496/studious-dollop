@@ -70,9 +70,6 @@ var initDb = function(callback) {
 };
 
 
-
-
-
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -93,9 +90,6 @@ app.get('/', function (req, res) {
 });
 
 
-
-
-
 app.get('/pagecount', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -112,12 +106,15 @@ app.get('/pagecount', function (req, res) {
 });
 
 
+
+
+
  
  
 // ar-section 
 
 
-app.get('/ws/parks/arnear', function (req, res) {
+app.get('/ws/parks/aa_near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -141,10 +138,14 @@ app.get('/ws/parks/arnear', function (req, res) {
 
 
 
+
+
+
+
 // d-section 
 
 
-app.get('/ws/parks/dnear', function (req, res) {
+app.get('/ws/parks/d_near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -167,7 +168,7 @@ app.get('/ws/parks/dnear', function (req, res) {
 });
 
 
-app.get('/ws/parks/dpark', function (req, res){
+app.get('/ws/parks/d_park', function (req, res){
 	  if (!db) {
     initDb(function(err){});
   }
@@ -185,15 +186,13 @@ res.end('success');
 
 
 
-app.get('/ws/parks/dx', function (req, res){ 
+app.get('/ws/parks/d_x', function (req, res){ 
 	  if (!db) {
     initDb(function(err){});
   }
   if (db) { 
   var ObjectId = require('mongodb').ObjectID;
- var collection = db.get('parkpoints');
-collection.remove({_id: new ObjectId(req.query.ii)}, function(err, result) {
-    });
+ db.get('parkpoints').remove({_id: new ObjectId(req.query.ii)}, function(err, result) {});
 }
     res.end('success');
   });
@@ -202,10 +201,15 @@ collection.remove({_id: new ObjectId(req.query.ii)}, function(err, result) {
 
 
 
+
+
+
+
+
 // a-section 
 
 
-app.get('/ws/parks/anear', function (req, res) {
+app.get('/ws/parks/a_near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -228,7 +232,7 @@ app.get('/ws/parks/anear', function (req, res) {
 });
 
 
-app.get('/ws/parks/apark', function (req, res){
+app.get('/ws/parks/a_park', function (req, res){
 	  if (!db) {
     initDb(function(err){});
   }
@@ -248,10 +252,16 @@ res.end('success');
 
 
 
+
+
+
+
+
+
 // t-section 
 
 
-app.get('/ws/parks/tnear', function (req, res) {
+app.get('/ws/parks/t_near', function (req, res) {
 	
     var lat = parseFloat(req.query.lat);
     var lon = parseFloat(req.query.lon);
@@ -274,7 +284,7 @@ app.get('/ws/parks/tnear', function (req, res) {
 });
 
 
-app.get('/ws/parks/tpark', function (req, res){
+app.get('/ws/parks/t_park', function (req, res){
 	  if (!db) {
     initDb(function(err){});
   }
@@ -289,6 +299,10 @@ app.get('/ws/parks/tpark', function (req, res){
 }
 res.end('success');
  });
+ 
+
+
+
 
 
 
