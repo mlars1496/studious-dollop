@@ -192,12 +192,24 @@ app.get('/ws/parks/d_x', function (req, res){
   }
   if (db) { 
   var ObjectId = require('mongodb').ObjectID;
- db.get('parkpoints').remove({_id: new ObjectId(req.query.ii)}, function(err, result) {});
+ db.collection('parkpoints').remove({_id: new ObjectId(req.query.ii)}, function(err, result) {});
 }
     res.end('success');
   });
 
-            
+
+
+app.get('/ws/parks/d_x/:id', function (req, res){ 
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) { 
+  var ObjectId = require('mongodb').ObjectID;
+   db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {});
+  }
+    res.end('success');
+  });
+          
 
 
 
