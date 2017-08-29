@@ -234,7 +234,7 @@ app.get('/ws/parks/a_near', function (req, res) {
 });
 
 
-app.post('/ws/parks/a_park', function (req, res){
+app.get('/ws/parks/a_park', function (req, res){
 	  if (!db) {
     initDb(function(err){});
   }
