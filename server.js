@@ -192,23 +192,13 @@ app.get('/ws/parks/d_x', function (req, res){
   }
   if (db) { 
   var ObjectId = require('mongodb').ObjectID;
- db.collection('parkpoints').remove({_id: new ObjectId(req.query.ii)}, function(err, result) {});
+ db.collection('parkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {});
 }
     res.end('success');
   });
 
 
 
-app.get('/ws/parks/d_x/:id', function (req, res){ 
-	  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) { 
-  var ObjectId = require('mongodb').ObjectID;
-   db.collection('parkpoints').deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {});
-  }
-    res.end('success');
-  });
           
 
 
@@ -262,6 +252,17 @@ res.end('success');
 
 
 
+app.get('/ws/parks/a_x', function (req, res){ 
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) { 
+  var ObjectId = require('mongodb').ObjectID;
+ db.collection('barkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {});
+}
+    res.end('success');
+  });
+
 
 
 
@@ -312,6 +313,19 @@ app.get('/ws/parks/t_park', function (req, res){
 res.end('success');
  });
  
+
+
+
+app.get('/ws/parks/t_x', function (req, res){ 
+	  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) { 
+  var ObjectId = require('mongodb').ObjectID;
+ db.collection('perkpoints').remove({_id: new ObjectId(req.query.id)}, function(err, result) {});
+}
+    res.end('success');
+  });
 
 
 
